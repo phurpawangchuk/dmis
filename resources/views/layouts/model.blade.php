@@ -1,76 +1,34 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex,nofollow">
-    <title>Laravel 9 | Roles and Permissions Manager</title>
-    <link rel="canonical" href="https://www.wrappixel.com/templates/monster-admin-lite/" />
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
-    <!-- Custom CSS -->
-    <link href="{{ asset('admin_assets/css/style.min.css') }}" rel="stylesheet">
-
-    <!-- Theme style -->
-   <!-- <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}"> -->
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-        <style>
-            .btn{
-                margin: 2.5px;
-            }
-        </style>
-    @yield('styles')
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DMiS - @yield('title')</title>
+  <link rel="shortcut icon" href="{{ asset('/images/fav.jpeg') }}">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link rel="stylesheet" href="{{asset('/css/all.min.css')}}">
+  <link rel="stylesheet" href="{{asset('/css/jqueryui.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('css/adminlte.min.css')}}">
+     <!-- slim select roles. permission etc -->
+  <link rel="stylesheet" href="{{ asset('css/slimselect.min.css') }}">
 </head>
-
 <body>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
-        </div>
-    </div>
-    <div>
-        @if(Session::has('status-success'))
-            <div class="alert alert-success">
-                {{Session::get('status-success')}}
-            </div>
-        @endif
+  <section class="content">
+    @yield('content')
+  </section>
+  <!--role select-->
+  <script src="{{ asset('/js/slimselect.min.js') }}"></script>
 
-        @if(Session::has('status-info'))
-            <div class="alert alert-info">
-                {{Session::get('status-info')}}
-            </div>
-        @endif
-
-        @if(Session::has('status-warning'))
-            <div class="alert alert-warning">
-                {{Session::get('status-warning')}}
-            </div>
-        @endif
-
-        @if(Session::has('status-danger'))
-            <div class="alert alert-danger">
-                {{Session::get('status-danger')}}
-            </div>
-        @endif
-
-        @yield('content')
-
-    </div>
-    <script src="{{ asset('admin_assets/js/custom.js') }}"></script>
-    @yield('scripts')
+  <!-- Editor summernote css/js -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+  <script type="text/javascript">
+      $('#description').summernote({
+          height: 400
+      });
+  </script>
 </body>
-
 </html>

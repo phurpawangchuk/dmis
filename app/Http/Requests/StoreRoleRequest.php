@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Role;
 use Illuminate\Validation\Rule;
+use Config;
 
 class StoreRoleRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class StoreRoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('role_create');
+        return Gate::allows(Config::get('constants.PERMISSIONS.ROLE_CREATE'));
     }
 
     /**

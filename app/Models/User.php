@@ -12,28 +12,30 @@ use Illuminate\Support\Facades\Hash;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
         'email',
+        'name',
+        'dob',
         'password',
         'role_id',
+        'status',
     ];
 
     public const VALIDATION_RULES = [
-        'name'      => 'required|string|min:2|max:200',
+        // 'avatar'    => 'required|image',
+        'name'    => 'required',
         'email'     => [
                         'required',
-                        'email',
                         'max:200',
+                        'email',
                         'unique:users',
                         ],
-        'role_id'   => 'required|exists:roles,id',
+        // 'role_id'   => 'required|exists:roles,id',
     ];
 
     /**
@@ -62,8 +64,16 @@ class User extends Authenticatable
         }
     }
 
+    public function profile(){
+        return $this->belongsTo(UserProfile::class,'id','user_id');
+    }
+
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class, 'country_id','id');
     }
 
     static function boot(){

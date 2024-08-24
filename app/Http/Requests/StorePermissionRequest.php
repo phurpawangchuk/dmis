@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Permission;
 use Illuminate\Validation\Rule;
+use Config;
 
 class StorePermissionRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class StorePermissionRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('permission_create');
+        return Gate::allows(Config::get('constants.PERMISSIONS.PERMISSION_CREATE'));
     }
 
     /**

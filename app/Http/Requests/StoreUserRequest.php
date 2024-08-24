@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Config;
 
 class StoreUserRequest extends FormRequest
 {
@@ -29,9 +30,10 @@ class StoreUserRequest extends FormRequest
         $rules =  User::VALIDATION_RULES;
 
         if($this->getMethod() == 'POST'){ //store
-            $rules += ['password' => 'required|confirmed|min:3|max:200'];
-        } else{ //update-PUT
-            $rules['email'] = Rule::unique('users')->ignore($this->user);
+             $rules += ['password' => 'required|confirmed|min:3|max:200'];
+        } else{ //update
+            //$rules['email'] = Rule::unique('users')->ignore($this->user);
+            $rules += ['email' => 'required'];
         }
 
         return $rules;

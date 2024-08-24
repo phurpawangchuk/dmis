@@ -9,6 +9,7 @@ use App\Http\Requests\StorePermissionRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
+use Config;
 
 class PermissionController extends Controller
 {
@@ -19,20 +20,14 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies('permission_panel_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
-        $perPage = 10;  $page = 1;
-        $permissions = Permission::paginate($perPage);
-
-        $currentpage = $permissions->currentPage();
+        $perPage = 5;  $page = 1;
+        Session::put('pages', $page);
         
-        if($currentpage > 1){ 
-            $page = $perPage * ($currentpage - 1);
-        }
-        Session::put('pages',$page);
-
         //$permissions = Permission::paginate(10)->appends($request->query());
-        return view('admin.permissions.index',compact('permissions','perPage'));
+        $permissions = Permission::orderBy('name','asc')->get();
+        return view('dashboard.permissions.index',compact('permissions','perPage'));
     }
 
     /**
@@ -42,9 +37,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies(Config::get('constants.PERMISSIONS.PERMISSION_CREATE')), Response::HTTP_FORBIDDEN, 'Forbidden');
 
-        return view('admin.permissions.create');
+        return view('dashboard.permissions.create');
     }
 
     /**
@@ -57,7 +52,7 @@ class PermissionController extends Controller
     {
         Permission::create($request->validated());
 
-        return redirect()->route('admin.permissions.index')->with('status-success','New Permission created successfully');
+        return redirect()->route('dashboard.permissions.index')->with('status-success','New Permission created successfully');
     }
 
 
@@ -69,9 +64,9 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        abort_if(Gate::denies('permission_edit'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies(Config::get('constants.PERMISSIONS.PERMISSION_EDIT')), Response::HTTP_FORBIDDEN, 'Forbidden');
 
-        return view('admin.permissions.edit', compact('permission'));
+        return view('dashboard.permissions.edit', compact('permission'));
     }
 
     /**
@@ -86,7 +81,7 @@ class PermissionController extends Controller
         //$permission->update($request->validated());
         $permission->update($request->all());
 
-        return redirect()->route('admin.permissions.index')->with('status-success','Permission Updated successfully');
+        return redirect()->route('dashboard.permissions.index')->with('status-success','Permission Updated successfully');
     }
 
     /**
@@ -97,7 +92,7 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies(Config::get('constants.PERMISSIONS.PERMISSION_DELETE')), Response::HTTP_FORBIDDEN, 'Forbidden');
 
         $permission->delete();
 

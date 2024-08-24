@@ -10,6 +10,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
+use Config;
 
 class RoleController extends Controller
 {
@@ -20,7 +21,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        abort_if(Gate::denies('roles_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies('role_panel_access'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
         //$roles = Role::with('permissions')->paginate(5)->appends($request->query());;
         $perPage = 10;  $page = 1;
@@ -33,7 +34,7 @@ class RoleController extends Controller
         }
         Session::put('pages',$page);
 
-        return view('admin.roles.index',compact('roles','perPage'));
+        return view('dashboard.roles.index',compact('roles','perPage'));
     }
 
     /**
@@ -44,9 +45,10 @@ class RoleController extends Controller
     public function create()
     {
         abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, 'Forbidden');
+
         $permissions = Permission::all()->pluck('name', 'id');
 
-        return view('admin.roles.create', compact('permissions'));
+        return view('dashboard.roles.create', compact('permissions'));
     }
 
     /**
@@ -57,10 +59,10 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $role = Role::create($request->validated());
+        $role = Role::create($request->all());
         $role->permissions()->sync($request->permissions);
 
-        return redirect()->route('admin.roles.index')->with('status-success','New Role created successfully');
+        return redirect()->route('dashboard.roles.index')->with('status-success','New Role created successfully');
     }
 
 
@@ -74,7 +76,7 @@ class RoleController extends Controller
     {
         abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, 'Forbidden');
 
-        return view('admin.roles.show',compact('role'));
+        return view('dashboard.roles.show',compact('role'));
     }
 
 
@@ -86,10 +88,11 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, 'Forbidden');
+        abort_if(Gate::denies(Config::get('constants.PERMISSIONS.ROLE_EDIT')), Response::HTTP_FORBIDDEN, 'Forbidden');
+
         $permissions = Permission::all()->pluck('name', 'id');
 
-        return view('admin.roles.edit', compact('role','permissions'));
+        return view('dashboard.roles.edit', compact('role','permissions'));
     }
 
     /**
@@ -104,8 +107,9 @@ class RoleController extends Controller
         // $role->update($request->validated());
         $role->update($request->all());
         $role->permissions()->sync($request->permissions);
+        //$role->permissions()->sync([1,2,6]);
 
-        return redirect()->route('admin.roles.index')->with('status-success','Role Updated successfully');
+        return redirect()->route('dashboard.roles.index')->with('status-success','Role Updated successfully');
     }
 
     /**
@@ -116,6 +120,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        abort_if(Gate::denies(Config::get('constants.PERMISSIONS.ROLE_DELETE')), Response::HTTP_FORBIDDEN, 'Forbidden');
+
         $role->delete();
 
         return redirect()->back()->with(['status-success' => "Role Deleted successfully"]);

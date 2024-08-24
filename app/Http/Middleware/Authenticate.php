@@ -16,7 +16,9 @@ class Authenticate extends Middleware
     {
        
         if (! $request->expectsJson()) {
-            return route('login');
+            //return redirect()->to('http://localhost/ydf/public/');
+            return route('welcome');
+            // return view ('frontend.frontpage');
         }
     }
 }

@@ -26,7 +26,7 @@ class PermissionTableSeeder extends Seeder
             // user permissions
 
             [
-                'name' => 'users_access',
+                'name' => 'user_panel_access',
             ],
 
             [
@@ -49,7 +49,7 @@ class PermissionTableSeeder extends Seeder
             // role permissions
 
             [
-                'name' => 'roles_access',
+                'name' => 'role_panel_access',
             ],
 
             [
@@ -72,7 +72,7 @@ class PermissionTableSeeder extends Seeder
             // permission permissions
 
             [
-                'name' => 'permissions_access',
+                'name' => 'permission_panel_access',
             ],
 
             [
